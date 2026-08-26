@@ -1,0 +1,1 @@
+document.addEventListener('click',e=>{if(e.target.closest('nav a'))document.body.classList.remove('navopen')});
