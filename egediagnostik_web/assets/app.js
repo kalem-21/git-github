@@ -50,6 +50,15 @@ function updateTime(){
 updateTime();setInterval(updateTime,1000);
 
 function setText(selector,value){const el=document.querySelector(selector);if(el&&value!=null&&value!=='')el.textContent=value}
+function renderCollections(collections={}){
+ const products=Array.isArray(collections.products)?collections.products.filter(x=>x.is_active!==false).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)):null;
+ if(products){const grid=document.querySelector('.solution-grid');if(grid)grid.innerHTML=products.map(x=>`<article class="${['CT','MR'].includes(String(x.symbol).toUpperCase())?'imaging-card':''}"><div class="symbol">${esc(x.symbol||'•')}</div><h3>${esc(x.title||'')}</h3><p>${esc(x.description||'')}</p>${x.url?`<a href="${esc(x.url)}">Detaylı İncele →</a>`:''}</article>`).join('')}
+ const services=Array.isArray(collections.services)?collections.services.filter(x=>x.is_active!==false).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)):null;
+ if(services){const grid=document.querySelector('.service-grid');if(grid)grid.innerHTML=services.map((x,i)=>`<article><b>${String(i+1).padStart(2,'0')}</b><h3>${esc(x.title||'')}</h3><p>${esc(x.description||'')}</p></article>`).join('')}
+ const news=Array.isArray(collections.news)?collections.news.filter(x=>x.is_active!==false).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)):null;
+ if(news){const grid=document.querySelector('.news-grid');if(grid)grid.innerHTML=news.map(x=>`<article><time>${esc(x.category||'HABER')}</time><h3>${esc(x.title||'')}</h3><p>${esc(x.description||'')}</p></article>`).join('')}
+ bindTilt();
+}
 function applySiteCms(data){
  const s=data?.settings||{},h=s.homepage||{},c=s.contact||{},seo=s.seo||{},brand=s.brand||{},footer=s.footer||{},vis=s.visibility||{};
  if(seo.title)document.title=seo.title;
@@ -68,11 +77,12 @@ function applySiteCms(data){
  setText('.eco-head>div:first-child p',footer.description);setText('.eco-status b',footer.status_title);setText('.eco-status small',footer.status_subtitle);
  if(Array.isArray(footer.ecosystem)&&footer.ecosystem.length){const flow=document.querySelector('.eco-flow');if(flow)flow.innerHTML=footer.ecosystem.map((label,i)=>`<span><b>${String(i+1).padStart(2,'0')}</b>${esc(label)}</span>${i<footer.ecosystem.length-1?'<i>→</i>':''}`).join('')}
  const map={guidance:'#sonuc-rehberligi',solutions:'#urunler',imaging:'.imaging-zone',services:'#hizmetler',academy:'#akademi',news:'#haberler',contact:'#iletisim'};Object.entries(map).forEach(([k,sel])=>{if(k in vis){const el=document.querySelector(sel);if(el)el.style.display=vis[k]?'':'none'}});
+ renderCollections(s.collections||{});
  if(Array.isArray(data.sliders)&&data.sliders.length)renderCmsSliders(data.sliders.filter(x=>x.is_active!==false).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)));
  updateTime();
 }
 function renderCmsSliders(items){const wrap=document.querySelector('.slider .slides');if(!wrap||!items.length)return;wrap.innerHTML=items.map((s,i)=>`<article class="slide ${i===0?'active':''}"><img src="${esc(s.image_url||'/assets/slider-ai-lab.svg')}" alt="${esc(s.title||'EGE Diagnostik')}"><div class="slide-shade"></div><div class="slide-copy"><span class="eyebrow light">${esc(s.eyebrow||'EGE DIAGNOSTIK')}</span><h1>${esc(s.title||'')}</h1><p>${esc(s.subtitle||'')}</p><div class="actions">${s.button_text?`<a class="primary" href="${esc(s.button_url||'#')}">${esc(s.button_text)}</a>`:''}<a class="glass-btn" href="/login.html">Portal Girişi</a></div></div><aside class="live-card"><span>${esc(s.eyebrow||'EGE DIAGNOSTIK')}</span><b>EGE DIAGNOSTIK</b><div class="pulse-line"></div><small>Technology • Quality • Service • Academy</small></aside></article>`).join('')}
-async function loadSiteCms(){let data=null;try{data=JSON.parse(localStorage.getItem(CMS_KEY)||'null')}catch{}if(!data){try{const r=await fetch('/api/contact?resource=site',{cache:'no-store'});if(r.ok){const j=await r.json();if(j.settings||j.sliders?.length)data={settings:j.settings,sliders:j.sliders}}}catch{}}if(data)applySiteCms(data);initSlider()}
+async function loadSiteCms(){let data=null;try{data=JSON.parse(localStorage.getItem(CMS_KEY)||'null')}catch{}if(!data){try{const r=await fetch('/api/contact?resource=site',{cache:'no-store'});if(r.ok){const j=await r.json();if(j.settings||j.sliders?.length)data={settings:j.settings,sliders:j.sliders}}}catch{}}if(data)applySiteCms(data);else bindTilt();initSlider()}
 
 function initSlider(){
  const slides=[...document.querySelectorAll('.slide')],dotsWrap=document.querySelector('.slide-dots');let current=0,sliderTimer,startX=null;if(!slides.length||!dotsWrap)return;dotsWrap.innerHTML='';
@@ -87,4 +97,4 @@ loadSiteCms();
 const cf=document.querySelector('#contactForm'),fs=document.querySelector('#formStatus');
 if(cf)cf.addEventListener('submit',async e=>{e.preventDefault();if(fs)fs.textContent='Gönderiliyor…';const payload=Object.fromEntries(new FormData(cf));try{const r=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}),j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'error');if(fs)fs.textContent='Mesajınız alındı. Teşekkür ederiz.';cf.reset()}catch{if(fs)fs.textContent='Canlı kayıt servisi henüz yapılandırılmadı. info@egediagnostik.com.tr adresinden bize ulaşabilirsiniz.'}});
 
-if(matchMedia('(pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.querySelectorAll('.principles article,.solution-grid article,.service-grid article,.news-grid article,.guidance-flow article,.code-card,.imaging-monitor').forEach(card=>{card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform=`perspective(950px) rotateX(${(-y*2.3).toFixed(2)}deg) rotateY(${(x*2.8).toFixed(2)}deg) translateY(-3px)`});card.addEventListener('pointerleave',()=>card.style.transform='')})}
+function bindTilt(){if(!matchMedia('(pointer:fine)').matches||matchMedia('(prefers-reduced-motion: reduce)').matches)return;document.querySelectorAll('.principles article,.solution-grid article,.service-grid article,.news-grid article,.guidance-flow article,.code-card,.imaging-monitor').forEach(card=>{if(card.dataset.tiltBound)return;card.dataset.tiltBound='1';card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform=`perspective(950px) rotateX(${(-y*2.3).toFixed(2)}deg) rotateY(${(x*2.8).toFixed(2)}deg) translateY(-3px)`});card.addEventListener('pointerleave',()=>card.style.transform='')})}
