@@ -1,0 +1,4 @@
+const form=document.querySelector('#loginForm'),msg=document.querySelector('#loginMessage'),demoBox=document.querySelector('#demoBox');
+fetch('/api/health',{cache:'no-store'}).then(r=>r.json()).then(j=>{if(j.mode==='demo')demoBox?.classList.add('visible')}).catch(()=>{});
+document.querySelectorAll('[data-email]').forEach(b=>b.addEventListener('click',()=>{form.elements.email.value=b.dataset.email;form.elements.password.focus()}));
+form.addEventListener('submit',async e=>{e.preventDefault();msg.textContent='Kimlik doğrulanıyor…';try{const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(form)))}),j=await r.json();if(!r.ok)throw new Error(j.error==='temporarily_locked'?'Çok fazla başarısız deneme. Lütfen daha sonra tekrar deneyin.':'E-posta veya parola hatalı.');location.href=j.redirect}catch(err){msg.textContent=err.message}});
