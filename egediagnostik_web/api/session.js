@@ -8,8 +8,8 @@ export default async function handler(req,res){
   }
   if(req.method!=='GET')return res.status(405).json({error:'method_not_allowed'});
   try{
-    const token=cookie(req,'ege_session'); if(!token)return res.status(401).json({error:'unauthorized'});
+    const token=cookie(req,'ege_session');if(!token)return res.status(401).json({error:'unauthorized'});
     const s=await readSession(token);
-    return res.status(200).json({ok:true,user:{id:s.sub,name:s.name,role:s.role}});
+    return res.status(200).json({ok:true,demo:Boolean(s.demo),user:{id:s.sub,name:s.name,role:s.role}});
   }catch{return res.status(401).json({error:'invalid_session'});}
 }
