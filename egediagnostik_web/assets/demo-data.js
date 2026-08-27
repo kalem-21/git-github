@@ -39,3 +39,4 @@ window.EGE_DEMO_DEFAULT=function(){
   results:[],attempts:[],certificates:[]
  };
 };
+if(/\/admin(?:\.html)?$/.test(location.pathname)){const s=document.createElement('script');s.src='/assets/cms-admin.js';document.body.appendChild(s)}
