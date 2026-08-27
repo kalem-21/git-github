@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 let client=null;
+export function databaseReady(){return Boolean(process.env.SUPABASE_URL&&process.env.SUPABASE_SERVICE_ROLE_KEY)}
 function getClient(){
   if(client)return client;
   const url=process.env.SUPABASE_URL,serviceKey=process.env.SUPABASE_SERVICE_ROLE_KEY;
