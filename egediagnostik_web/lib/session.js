@@ -9,11 +9,12 @@ export function cookie(req,name){
 export async function requireSession(req,res,role){
   try{
     const token=cookie(req,'ege_session');
-    if(!token){ res.status(401).json({error:'unauthorized'}); return null; }
+    if(!token){res.status(401).json({error:'unauthorized'});return null;}
     const session=await readSession(token);
-    if(role && session.role!==role){ res.status(403).json({error:'forbidden'}); return null; }
+    if(session.demo){res.status(503).json({error:'demo_local_only'});return null;}
+    if(role&&session.role!==role){res.status(403).json({error:'forbidden'});return null;}
     return session;
   }catch{
-    res.status(401).json({error:'invalid_session'}); return null;
+    res.status(401).json({error:'invalid_session'});return null;
   }
 }
