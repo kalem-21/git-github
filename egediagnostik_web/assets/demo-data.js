@@ -39,4 +39,7 @@ window.EGE_DEMO_DEFAULT=function(){
   results:[],attempts:[],certificates:[]
  };
 };
-if(/\/admin(?:\.html)?$/.test(location.pathname)){const s=document.createElement('script');s.src='/assets/cms-admin.js';document.body.appendChild(s)}
+if(/\/admin(?:\.html)?$/.test(location.pathname)){
+ const a=document.createElement('script');a.src='/assets/cms-admin.js';document.body.appendChild(a);
+ const b=document.createElement('script');b.src='/assets/cms-advanced.js';document.body.appendChild(b);
+}
