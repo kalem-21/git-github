@@ -14,7 +14,16 @@ async function getCourseBundle(courseId,userId,admin=false){
  if(sectionIds.length){let lq=db.from('lessons').select('*').in('section_id',sectionIds).order('sort_order',{ascending:true}).order('id',{ascending:true});if(!admin)lq=lq.eq('is_active',true);const lr=await lq;if(lr.error)throw lr.error;lessons=lr.data||[];}
  const lessonIds=lessons.map(x=>x.id);let progress=[];
  if(userId&&lessonIds.length){const pr=await db.from('lesson_progress').select('*').eq('user_id',Number(userId)).in('lesson_id',lessonIds);if(pr.error)throw pr.error;progress=pr.data||[];}
- return {course,sections:(sections||[]).map(s=>({...s,lessons:lessons.filter(l=>Number(l.section_id)===Number(s.id)).map(l=>({...l,progress:progress.find(p=>Number(p.lesson_id)===Number(l.id))||null}))}))};
+ const completedCount=lessons.filter(l=>progress.some(p=>Number(p.lesson_id)===Number(l.id)&&p.completed)).length;
+ return {course:{...course,lesson_count:lessons.length,completed_count:completedCount,progress_percent:lessons.length?Math.round(completedCount/lessons.length*100):0},sections:(sections||[]).map(s=>({...s,lessons:lessons.filter(l=>Number(l.section_id)===Number(s.id)).map(l=>({...l,progress:progress.find(p=>Number(p.lesson_id)===Number(l.id))||null}))}))};
+}
+
+async function finishEnrollmentIfComplete(userId,lessonId){
+ const {data:lesson}=await db.from('lessons').select('id,section_id,course_sections(course_id)').eq('id',lessonId).maybeSingle();
+ const courseId=lesson?.course_sections?.course_id;if(!courseId)return;
+ const bundle=await getCourseBundle(courseId,userId,false);if(!bundle)return;
+ const total=Number(bundle.course.lesson_count||0),done=Number(bundle.course.completed_count||0);
+ if(total>0&&done===total){await db.from('enrollments').update({completed_at:new Date().toISOString()}).eq('user_id',Number(userId)).eq('course_id',Number(courseId));}
 }
 
 export default async function handler(req,res){
@@ -34,8 +43,11 @@ export default async function handler(req,res){
   const action=String(req.body?.action||'');
   if(action==='progress'){
    const p=progressSchema.safeParse(req.body||{});if(!p.success)return res.status(400).json({error:'invalid_request'});
-   const payload={user_id:Number(s.sub),lesson_id:p.data.lesson_id,watched_seconds:p.data.watched_seconds,completed:p.data.completed,updated_at:new Date().toISOString()};
-   const {data,error}=await db.from('lesson_progress').upsert(payload,{onConflict:'user_id,lesson_id'}).select().single();if(error)throw error;return res.json({ok:true,item:data});
+   const {data:existing}=await db.from('lesson_progress').select('completed,watched_seconds').eq('user_id',Number(s.sub)).eq('lesson_id',p.data.lesson_id).maybeSingle();
+   const payload={user_id:Number(s.sub),lesson_id:p.data.lesson_id,watched_seconds:Math.max(Number(existing?.watched_seconds||0),p.data.watched_seconds),completed:Boolean(existing?.completed||p.data.completed),updated_at:new Date().toISOString()};
+   const {data,error}=await db.from('lesson_progress').upsert(payload,{onConflict:'user_id,lesson_id'}).select().single();if(error)throw error;
+   if(data.completed)await finishEnrollmentIfComplete(s.sub,p.data.lesson_id);
+   return res.json({ok:true,item:data});
   }
   if(s.role!=='admin')return res.status(403).json({error:'forbidden'});
   if(action==='upsert_section'){
