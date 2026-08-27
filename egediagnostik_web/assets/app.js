@@ -6,7 +6,7 @@ const menuClose=document.querySelector('.menu-close');
 const overlay=document.querySelector('.nav-overlay');
 const mobile=()=>window.innerWidth<=900;
 const CMS_KEY='ege_diagnostik_cms_v1';
-let cmsWorkingHours='Hafta içi 08:30–18:00';
+let cmsWorkingHours='Hafta içi 08:30–18:00',cmsSchedule=null;
 const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 
 function setMenu(open){
@@ -40,11 +40,15 @@ window.addEventListener('scroll',()=>{if(progress){const h=document.documentElem
 const reveals=[...document.querySelectorAll('.reveal')];
 if('IntersectionObserver'in window){const io=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');io.unobserve(entry.target)}}),{threshold:.1});reveals.forEach(x=>io.observe(x))}else reveals.forEach(x=>x.classList.add('is-visible'));
 
+function toMinute(text){const m=String(text||'').match(/^(\d{1,2}):(\d{2})$/);return m?Number(m[1])*60+Number(m[2]):null}
 function parseWorkingHours(){const m=String(cmsWorkingHours||'').match(/(\d{1,2}):(\d{2}).*?(\d{1,2}):(\d{2})/);if(!m)return{start:510,end:1080};return{start:Number(m[1])*60+Number(m[2]),end:Number(m[3])*60+Number(m[4])}}
 function updateTime(){
-  const d=new Date(),clock=d.toLocaleTimeString('tr-TR',{hour12:false}),day=d.getDay(),minutes=d.getHours()*60+d.getMinutes(),h=parseWorkingHours(),open=day>=1&&day<=5&&minutes>=h.start&&minutes<h.end;
+  const d=new Date(),clock=d.toLocaleTimeString('tr-TR',{hour12:false}),day=d.getDay(),minutes=d.getHours()*60+d.getMinutes();
   document.querySelectorAll('#liveClock,#clockLarge').forEach(x=>x.textContent=clock);
-  const hours=String(cmsWorkingHours||'08:30–18:00').replace(/^Hafta içi\s*/i,''),text=open?`AÇIK • ${hours}`:`KAPALI • Sonraki iş günü ${String(hours).split(/[–-]/)[0].trim()}`,w=document.querySelector('#workState'),wl=document.querySelector('#workLarge');
+  let open=false,hours='08:30–18:00',nextText='Sonraki çalışma saatini kontrol edin';
+  if(cmsSchedule&&cmsSchedule[day]){const rule=cmsSchedule[day],start=toMinute(rule.start),end=toMinute(rule.end);hours=`${rule.start||'08:30'}–${rule.end||'18:00'}`;open=Boolean(rule.enabled&&start!=null&&end!=null&&minutes>=start&&minutes<end);if(!rule.enabled)nextText='Bugün kapalı';else nextText=`Bugün ${rule.start||'08:30'}–${rule.end||'18:00'}`}
+  else{const h=parseWorkingHours();hours=String(cmsWorkingHours||'08:30–18:00').replace(/^Hafta içi\s*/i,'');open=day>=1&&day<=5&&minutes>=h.start&&minutes<h.end;nextText=`Sonraki iş günü ${String(hours).split(/[–-]/)[0].trim()}`}
+  const text=open?`AÇIK • ${hours}`:`KAPALI • ${nextText}`,w=document.querySelector('#workState'),wl=document.querySelector('#workLarge');
   if(w)w.textContent=text;if(wl){wl.textContent=open?'AÇIK':'KAPALI';wl.style.color=open?'#118d67':'#b85c5c'}
 }
 updateTime();setInterval(updateTime,1000);
@@ -59,8 +63,10 @@ function renderCollections(collections={}){
  if(news){const grid=document.querySelector('.news-grid');if(grid)grid.innerHTML=news.map(x=>`<article><time>${esc(x.category||'HABER')}</time><h3>${esc(x.title||'')}</h3><p>${esc(x.description||'')}</p></article>`).join('')}
  bindTilt();
 }
+function renderFooterColumns(columns){const wrap=document.querySelector('.eco-columns');if(!wrap||!Array.isArray(columns)||!columns.length)return;wrap.innerHTML=columns.map(c=>`<div><b>${esc(c.title||'')}</b>${(c.items||[]).map(x=>x.url?`<a href="${esc(x.url)}">${esc(x.label||'')}</a>`:`<span>${esc(x.label||'')}</span>`).join('')}</div>`).join('')}
 function applySiteCms(data){
  const s=data?.settings||{},h=s.homepage||{},c=s.contact||{},seo=s.seo||{},brand=s.brand||{},footer=s.footer||{},vis=s.visibility||{};
+ if(s.schedule&&typeof s.schedule==='object')cmsSchedule=s.schedule;
  if(seo.title)document.title=seo.title;
  if(seo.description){let meta=document.querySelector('meta[name="description"]');if(!meta){meta=document.createElement('meta');meta.name='description';document.head.appendChild(meta)}meta.content=seo.description}
  if(brand.logo_url)document.querySelectorAll('.brand img,.eco-head img').forEach(img=>img.src=brand.logo_url);
@@ -76,6 +82,7 @@ function applySiteCms(data){
  setText('#iletisim .contact-copy .eyebrow',h.contact_eyebrow);setText('#iletisim .contact-copy h2',h.contact_title);setText('#iletisim .contact-copy>p',h.contact_text);
  setText('.eco-head>div:first-child p',footer.description);setText('.eco-status b',footer.status_title);setText('.eco-status small',footer.status_subtitle);
  if(Array.isArray(footer.ecosystem)&&footer.ecosystem.length){const flow=document.querySelector('.eco-flow');if(flow)flow.innerHTML=footer.ecosystem.map((label,i)=>`<span><b>${String(i+1).padStart(2,'0')}</b>${esc(label)}</span>${i<footer.ecosystem.length-1?'<i>→</i>':''}`).join('')}
+ renderFooterColumns(footer.columns);
  const map={guidance:'#sonuc-rehberligi',solutions:'#urunler',imaging:'.imaging-zone',services:'#hizmetler',academy:'#akademi',news:'#haberler',contact:'#iletisim'};Object.entries(map).forEach(([k,sel])=>{if(k in vis){const el=document.querySelector(sel);if(el)el.style.display=vis[k]?'':'none'}});
  renderCollections(s.collections||{});
  if(Array.isArray(data.sliders)&&data.sliders.length)renderCmsSliders(data.sliders.filter(x=>x.is_active!==false).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)));
