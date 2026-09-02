@@ -52,3 +52,5 @@ jobs:
           name: EgeDiagnostik-Mobile-APK-v1.3.0
           path: EgeDiagnostik-Mobile-v1.3.0.apk
           retention-days: 30
+
+# Rebuild after launcher icon source repair.
