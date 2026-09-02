@@ -1,0 +1,81 @@
+name: Build EgeDiagnostik iOS
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'egediagnostik-ios/**'
+      - '.github/workflows/egediagnostik-ios.yml'
+  workflow_dispatch:
+
+jobs:
+  build-ios-simulator:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare app icons
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC_B64="egediagnostik-mobile/app-icon.b64"
+          ICON_DIR="egediagnostik-ios/EgeDiagnostik/Assets.xcassets/AppIcon.appiconset"
+          TMP_ICON="$RUNNER_TEMP/ege-icon.png"
+          mkdir -p "$ICON_DIR"
+          python3 - <<'PY'
+          import base64
+          from pathlib import Path
+          raw = Path('egediagnostik-mobile/app-icon.b64').read_text().strip()
+          Path('${{ runner.temp }}/ege-icon.png').write_bytes(base64.b64decode(raw))
+          PY
+          make_icon() { sips -z "$1" "$1" "$TMP_ICON" --out "$ICON_DIR/$2" >/dev/null; }
+          make_icon 40 Icon-20@2x.png
+          make_icon 60 Icon-20@3x.png
+          make_icon 58 Icon-29@2x.png
+          make_icon 87 Icon-29@3x.png
+          make_icon 80 Icon-40@2x.png
+          make_icon 120 Icon-40@3x.png
+          make_icon 120 Icon-60@2x.png
+          make_icon 180 Icon-60@3x.png
+          make_icon 20 Icon-20.png
+          make_icon 40 Icon-20@2x-ipad.png
+          make_icon 29 Icon-29.png
+          make_icon 58 Icon-29@2x-ipad.png
+          make_icon 40 Icon-40.png
+          make_icon 80 Icon-40@2x-ipad.png
+          make_icon 76 Icon-76.png
+          make_icon 152 Icon-76@2x.png
+          make_icon 167 Icon-83.5@2x.png
+          make_icon 1024 Icon-1024.png
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Build iOS Simulator app
+        working-directory: egediagnostik-ios
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project EgeDiagnostik.xcodeproj \
+            -scheme EgeDiagnostik \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Package simulator app
+        working-directory: egediagnostik-ios
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent \
+            build/Build/Products/Debug-iphonesimulator/EgeDiagnostik.app \
+            EgeDiagnostik-iOS-Simulator.zip
+
+      - name: Upload simulator artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: EgeDiagnostik-iOS-Simulator
+          path: egediagnostik-ios/EgeDiagnostik-iOS-Simulator.zip
+          retention-days: 30
