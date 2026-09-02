@@ -69,10 +69,6 @@ public class MainActivity extends Activity {
                 }
                 fileCallback = filePathCallback;
 
-                if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST);
-                }
-
                 Intent chooserIntent = createFileChooserIntent(fileChooserParams);
                 try {
                     startActivityForResult(chooserIntent, FILE_CHOOSER_REQUEST);
@@ -87,28 +83,36 @@ public class MainActivity extends Activity {
             @Override
             public void onPermissionRequest(final PermissionRequest request) {
                 runOnUiThread(() -> {
-                    boolean needsCamera = false;
+                    boolean wantsVideo = false;
                     for (String resource : request.getResources()) {
                         if (PermissionRequest.RESOURCE_VIDEO_CAPTURE.equals(resource)) {
-                            needsCamera = true;
+                            wantsVideo = true;
                             break;
                         }
                     }
 
-                    if (needsCamera && checkSelfPermission(Manifest.permission.CAMERA)
-                            != PackageManager.PERMISSION_GRANTED) {
-                        pendingWebPermissionRequest = request;
-                        requestPermissions(
-                                new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO},
-                                CAMERA_PERMISSION_REQUEST
-                        );
+                    if (!wantsVideo) {
+                        request.deny();
                         return;
                     }
 
-                    request.grant(request.getResources());
+                    if (checkSelfPermission(Manifest.permission.CAMERA)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        request.grant(new String[]{PermissionRequest.RESOURCE_VIDEO_CAPTURE});
+                    } else {
+                        pendingWebPermissionRequest = request;
+                        requestPermissions(
+                                new String[]{Manifest.permission.CAMERA},
+                                CAMERA_PERMISSION_REQUEST
+                        );
+                    }
                 });
             }
         });
+
+        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST);
+        }
 
         if (savedInstanceState == null) {
             webView.loadUrl(HOME_URL);
@@ -182,7 +186,7 @@ public class MainActivity extends Activity {
                     for (int i = 0; i < clipData.getItemCount(); i++) {
                         results[i] = clipData.getItemAt(i).getUri();
                     }
-                } else if (data.getData() != null) {
+                } else {
                     results = new Uri[]{data.getData()};
                 }
             }
@@ -200,14 +204,20 @@ public class MainActivity extends Activity {
             int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == CAMERA_PERMISSION_REQUEST && pendingWebPermissionRequest != null) {
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                pendingWebPermissionRequest.grant(pendingWebPermissionRequest.getResources());
-            } else {
-                pendingWebPermissionRequest.deny();
+        if (requestCode == CAMERA_PERMISSION_REQUEST) {
+            boolean granted = grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+
+            if (pendingWebPermissionRequest != null) {
+                if (granted) {
+                    pendingWebPermissionRequest.grant(
+                            new String[]{PermissionRequest.RESOURCE_VIDEO_CAPTURE}
+                    );
+                } else {
+                    pendingWebPermissionRequest.deny();
+                }
+                pendingWebPermissionRequest = null;
             }
-            pendingWebPermissionRequest = null;
         }
     }
 
