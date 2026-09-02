@@ -23,6 +23,7 @@ import java.util.List;
 public class MainActivity extends Activity {
 
     private static final String HOME_URL = "https://egediagnostik.com";
+    private static final String EXIT_URL = "app-exit://close";
     private static final int FILE_CHOOSER_REQUEST = 501;
     private static final int CAMERA_PERMISSION_REQUEST = 502;
 
@@ -51,9 +52,29 @@ public class MainActivity extends Activity {
         settings.setBuiltInZoomControls(false);
 
         webView.setWebViewClient(new WebViewClient() {
+            private boolean handleSpecialUrl(String url) {
+                if (url != null && EXIT_URL.equalsIgnoreCase(url.trim())) {
+                    if (webView != null) {
+                        webView.stopLoading();
+                    }
+                    finishAffinity();
+                    return true;
+                }
+                return false;
+            }
+
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                return false;
+                String url = request != null && request.getUrl() != null
+                        ? request.getUrl().toString()
+                        : "";
+                return handleSpecialUrl(url);
+            }
+
+            @Override
+            @SuppressWarnings("deprecation")
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                return handleSpecialUrl(url);
             }
         });
 
