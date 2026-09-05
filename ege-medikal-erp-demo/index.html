@@ -1,2 +1,110 @@
 <!doctype html>
-<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Serdar GÜNLÜ Management System — Medikal ERP Demo</title><style>body{font-family:system-ui;margin:0;background:#090d13;color:#eef5fb}a{color:#7db9ff}.wrap{max-width:980px;margin:0 auto;padding:28px}.card{background:#111821;border:1px solid #263342;border-radius:18px;padding:18px;margin:14px 0}.btn{display:inline-block;background:#2484ff;color:white;padding:10px 14px;border-radius:10px;text-decoration:none}.muted{color:#8da0b3}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.kpi{background:#111821;border:1px solid #263342;border-radius:16px;padding:16px}.kpi b{font-size:28px;display:block;margin-top:8px}@media(max-width:700px){.grid{grid-template-columns:1fr 1fr}}</style></head><body><div class="wrap"><h1>Serdar GÜNLÜ Management System</h1><p class="muted">Medikal ERP — Envanter, Teknik Servis, Bakım, Depo/Stok ve Lojistik</p><div class="grid"><div class="kpi">KURUM ARIZALARI<b>0</b></div><div class="kpi">BEKLEYEN BAKIMLAR<b>3</b></div><div class="kpi">KRİTİK STOK<b>0</b></div><div class="kpi">CİHAZ SAĞLIK ORANI<b>67%</b></div></div><div class="card"><h2>Canlı demo güncelleniyor</h2><p>PHP + MySQL ERP çekirdeği GitHub branch üzerinde hazırlanıyor. Bu sayfa Vercel/önizleme için başlangıç noktasıdır.</p></div></div></body></html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Serdar GÜNLÜ Management System — Canlı Medikal ERP Demo</title>
+<style>
+:root{--bg:#090d13;--panel:#111821;--panel2:#151e29;--line:#263342;--text:#eef5fb;--muted:#8da0b3;--blue:#2484ff;--cyan:#32d6ff;--red:#ff4f64;--green:#38d996;--yellow:#ffc94d;--purple:#9f7cff}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;background:radial-gradient(circle at top right,#14233a 0,#090d13 34%,#090d13 100%);color:var(--text)}button,input,select,textarea{font:inherit}.app{min-height:100vh;display:grid;grid-template-columns:270px 1fr}.side{background:linear-gradient(180deg,#0d131c,#0a0f16);border-right:1px solid var(--line);padding:22px 15px;position:sticky;top:0;height:100vh}.brand{padding:8px 8px 20px}.brand strong{display:block;font-size:20px}.brand span{font-size:11px;color:var(--muted);letter-spacing:.12em}.chip{display:inline-block;margin-top:10px;padding:5px 9px;border-radius:99px;background:#2484ff22;color:#7db9ff;font-size:11px;font-weight:800}.nav{display:grid;gap:6px}.nav button{border:1px solid transparent;background:transparent;color:#b6c5d5;padding:12px 13px;border-radius:12px;text-align:left;cursor:pointer}.nav button:hover,.nav button.active{background:#172334;border-color:#29405d;color:#fff}.main{padding:22px;min-width:0}.top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px}.title h1{font-size:26px;margin:0}.title p{color:var(--muted);margin:5px 0 0}.user{border:1px solid var(--line);background:var(--panel);border-radius:13px;padding:10px 13px;color:#dce7f3}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.card{background:linear-gradient(180deg,#131c27,#101720);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 12px 30px #0005}.kpi small{display:block;color:var(--muted);font-weight:800;font-size:11px}.kpi b{display:block;font-size:30px;margin-top:8px}.kpi .accent{font-size:12px;margin-top:8px;color:#b9c7d7}.section{margin-top:16px}.section h2{font-size:18px;margin:0 0 10px}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}.input,.select,.textarea{background:#0d141d;border:1px solid var(--line);color:var(--text);border-radius:10px;padding:10px 11px}.input{min-width:280px}.textarea{width:100%;min-height:92px;resize:vertical}.btn{border:0;border-radius:10px;padding:10px 12px;font-weight:800;cursor:pointer}.btn.primary{background:var(--blue);color:#fff}.btn.ghost{background:#1a2636;color:#dce7f3}.btn.ok{background:#173d32;color:#7cf0bd}.btn.warn{background:#433717;color:#ffe084}.btn.danger{background:#40202a;color:#ff9baa}.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:16px;background:var(--panel)}table{width:100%;border-collapse:collapse;min-width:900px}th,td{padding:12px 13px;border-bottom:1px solid #202d3b;text-align:left;font-size:13px}th{font-size:11px;color:#8fa4b9;background:#0e151e;position:sticky;top:0}tr:hover td{background:#121d29}.badge{display:inline-block;padding:5px 8px;border-radius:99px;font-size:11px;font-weight:900}.b-green{background:#153b31;color:#72e8b3}.b-red{background:#40212b;color:#ff97a5}.b-yellow{background:#443719;color:#ffd66d}.b-blue{background:#19354f;color:#7fc0ff}.b-purple{background:#302b4e;color:#bcaaff}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.field label{display:block;color:#a9b9c9;font-size:11px;font-weight:800;margin:0 0 6px}.field input,.field select{width:100%}.notice{border:1px solid #24415c;background:#10243a;color:#b9dafa;padding:12px 13px;border-radius:12px;margin-bottom:12px}.hide{display:none!important}.mobilebar{display:none}.footer{color:#687c90;font-size:11px;text-align:center;padding:24px}.accent-red{color:var(--red)}.accent-green{color:var(--green)}.accent-yellow{color:var(--yellow)}.accent-blue{color:var(--cyan)}
+@media(max-width:980px){.app{grid-template-columns:1fr}.side{display:none;position:fixed;z-index:30;inset:0 auto 0 0;width:280px}.side.open{display:block}.mobilebar{display:flex}.main{padding:14px}.cards{grid-template-columns:repeat(2,1fr)}.top{align-items:flex-start}.user{display:none}.formgrid{grid-template-columns:1fr}}
+@media(max-width:560px){.cards{grid-template-columns:1fr}.input{min-width:0;width:100%}.toolbar>*{width:100%}.title h1{font-size:21px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side" id="side">
+  <div class="brand"><strong>Serdar GÜNLÜ</strong><span>MANAGEMENT SYSTEM</span><div class="chip">MEDİKAL ERP • CANLI DEMO</div></div>
+  <div class="nav" id="nav">
+    <button data-page="dashboard" class="active">◈ İş Zekası & Kontrol</button>
+    <button data-page="inventory">▣ Envanter</button>
+    <button data-page="maintenance">◷ Periyodik Bakım</button>
+    <button data-page="service">⚙ Teknik Servis</button>
+    <button data-page="warehouse">⌂ Depo & Stok</button>
+    <button data-page="requests">↔ Parça Talepleri</button>
+  </div>
+</aside>
+<main class="main">
+  <div class="mobilebar toolbar"><button class="btn ghost" onclick="document.getElementById('side').classList.toggle('open')">☰ Menü</button></div>
+  <div class="top"><div class="title"><h1 id="pageTitle">İŞ ZEKASI & KONTROL MERKEZİ</h1><p id="pageSub">Envanter, servis, bakım, depo ve lojistik tek merkezde.</p></div><div class="user"><b>Sistem Yöneticisi</b><br><span style="color:var(--muted);font-size:11px">Tarayıcı demosu</span></div></div>
+
+  <section id="dashboard" class="page">
+    <div class="cards">
+      <div class="card kpi"><small>KURUM ARIZALARI</small><b class="accent-red">1</b><div class="accent">Açık servis kayıtları</div></div>
+      <div class="card kpi"><small>BEKLEYEN BAKIMLAR</small><b class="accent-yellow">3</b><div class="accent">Planlanan bakım takvimi</div></div>
+      <div class="card kpi"><small>KRİTİK STOK</small><b class="accent-blue">2</b><div class="accent">Min. seviyenin altında</div></div>
+      <div class="card kpi"><small>CİHAZ SAĞLIK ORANI</small><b class="accent-green">75%</b><div class="accent">Aktif: 3 / Toplam: 4</div></div>
+    </div>
+    <div class="section card"><h2>Hızlı Operasyonel İşlemler</h2><div class="toolbar"><button class="btn primary" onclick="openPage('service')">Arıza Formu Gir</button><button class="btn ghost" onclick="openPage('maintenance')">Bakım Takibi</button><button class="btn ghost" onclick="openPage('warehouse')">Depo & Parçalar</button><button class="btn ghost" onclick="openPage('inventory')">Envanter Listesi</button></div></div>
+    <div class="section"><h2>Son Gerçekleşen Servis Müdahaleleri</h2><div class="tablewrap"><table><thead><tr><th>FORM NO</th><th>TARİH</th><th>KURUM</th><th>CİHAZ</th><th>SONUÇ</th></tr></thead><tbody><tr><td>00000001</td><td>05.09.2026 18:39</td><td>Bingöl Devlet Hastanesi</td><td>MINDRAY BC5580 / 552555</td><td><span class="badge b-green">Cihaz Faal</span></td></tr><tr><td>00000002</td><td>04.09.2026 14:50</td><td>Dicle Üniversitesi</td><td>MINDRAY BS200 / BS2-1042</td><td><span class="badge b-yellow">Parça Bekleniyor</span></td></tr></tbody></table></div></div>
+  </section>
+
+  <section id="inventory" class="page hide">
+    <div class="toolbar"><input id="invSearch" class="input" placeholder="Seri no, tür, marka, kurum, bölüm ara..." oninput="filterInventory()"><button class="btn primary" onclick="demoToast('Yeni envanter formu demo modunda açıldı.')">+ Yeni Envanter</button></div>
+    <div class="tablewrap"><table id="invTable"><thead><tr><th>GÖRSEL / ENVANTER</th><th>SERİ NO / QR</th><th>DURUM & KONUM</th><th>KURULUM / MONTAJ</th><th>İŞLEMLER</th></tr></thead><tbody>
+      <tr><td><b>HEMOTOLOJİ</b><br>MINDRAY BC5580</td><td><code>552555</code><br><span class="badge b-blue">QR-ENV-K2-00001</span></td><td><span class="badge b-green">Aktif (Kurumda)</span><br>Bingöl Devlet Hastanesi<br>BİNGÖL / KIĞI • ACİL</td><td>02.09.2026 02:26<br>Serdar Günlü</td><td><button class="btn ghost" onclick="openPage('service')">Servis Formları</button> <button class="btn ghost" onclick="openPage('maintenance')">Bakımlar</button></td></tr>
+      <tr><td><b>DOLAP</b><br>Arçelik Çift Kapılı</td><td><code>453453</code><br><span class="badge b-blue">QR-ENV-K2-00002</span></td><td><span class="badge b-yellow">Pasif (Depoda)</span><br>Depo Giriş: 01.01.2026</td><td>-</td><td><button class="btn ghost">Servis Formları</button> <button class="btn ghost">Bakımlar</button></td></tr>
+      <tr><td><b>BİYOKİMYA</b><br>MINDRAY BS200</td><td><code>BS2-1042</code><br><span class="badge b-blue">QR-ENV-K2-00003</span></td><td><span class="badge b-green">Aktif (Kurumda)</span><br>Dicle Üniversitesi Hastanesi<br>Merkez Lab.</td><td>20.08.2026 10:15<br>Ahmet Tekniker</td><td><button class="btn ghost" onclick="openPage('service')">Servis Formları</button> <button class="btn ghost" onclick="openPage('maintenance')">Bakımlar</button></td></tr>
+    </tbody></table></div>
+  </section>
+
+  <section id="maintenance" class="page hide">
+    <div class="notice">Bakım kayıtları cihaz, kurum ve periyot ile ilişkilidir. Bekleyen kayıtlar “Bakım Yap” akışıyla servis formuna dönüşür.</div>
+    <div class="tablewrap"><table><thead><tr><th>KURUM</th><th>CİHAZ / SERİ NO</th><th>PERİYOT</th><th>PLANLANAN TARİH</th><th>DURUM</th><th>İŞLEM</th></tr></thead><tbody>
+      <tr><td>Bingöl Devlet Hastanesi</td><td><b>MINDRAY BC5580</b><br>SN: 552555</td><td>Günlük Bakım</td><td>05.09.2026</td><td><span class="badge b-yellow">Bekliyor</span></td><td><button class="btn primary" onclick="openPage('service')">Bakım Yap</button></td></tr>
+      <tr><td>Bingöl Devlet Hastanesi</td><td><b>MINDRAY BC5580</b><br>SN: 552555</td><td>Haftalık Bakım</td><td>07.09.2026</td><td><span class="badge b-green">Tamamlandı</span></td><td>-</td></tr>
+      <tr><td>Dicle Üniversitesi</td><td><b>MINDRAY BS200</b><br>SN: BS2-1042</td><td>1 Ayda Bir</td><td>01.10.2026</td><td><span class="badge b-yellow">Bekliyor</span></td><td><button class="btn primary" onclick="openPage('service')">Bakım Yap</button></td></tr>
+    </tbody></table></div>
+  </section>
+
+  <section id="service" class="page hide">
+    <div class="card"><div class="toolbar"><span class="badge b-purple">FORM NO: 00000003</span><button class="btn ghost" onclick="demoToast('QR tarama akışı demo modunda.')">QR / Karekod Tara</button></div>
+      <div class="formgrid">
+        <div class="field"><label>Kurum Adı *</label><select class="select"><option>Bingöl Devlet Hastanesi</option><option>Dicle Üniversitesi Hastanesi</option></select></div>
+        <div class="field"><label>Bölüm / Birim *</label><select class="select"><option>ACİL</option><option>RUTİN</option><option>EK BİNA</option></select></div>
+        <div class="field"><label>Arızalı Aktif Cihaz *</label><select class="select"><option>MINDRAY BC5580 — 552555</option><option>MINDRAY BS200 — BS2-1042</option></select></div>
+        <div class="field"><label>Sonuç Durumu</label><select class="select"><option>Arıza Giderildi. Cihaz Faal.</option><option>Arıza Giderilemedi. Çalışmıyor.</option><option>Parça Bekleniyor.</option><option>Merkeze Alınması Gerekli.</option></select></div>
+        <div class="field"><label>Başlangıç Tarihi / Saati</label><input class="input" type="datetime-local" value="2026-09-05T19:06"></div>
+        <div class="field"><label>Bitiş Tarihi / Saati</label><input class="input" type="datetime-local" value="2026-09-05T20:06"></div>
+      </div>
+      <div class="field" style="margin-top:12px"><label>Bildirilen Arıza / Şikayet</label><textarea class="textarea">Cihaz numune aspirasyonu sırasında hata veriyor.</textarea></div>
+      <div class="field" style="margin-top:12px"><label>Tespit Edilen Arıza</label><textarea class="textarea">Sample probe hattında mekanik zorlanma tespit edildi.</textarea></div>
+      <div class="field" style="margin-top:12px"><label>Yapılan İşlem / Müdahale Detayı *</label><textarea class="textarea">Prob temizliği ve mekanik kontrol yapıldı. Yedek parça talebi oluşturuldu.</textarea></div>
+    </div>
+    <div class="section card"><h2>Serviste Kullanılan Yedek Parçalar (Zimmetten Düşüm)</h2><div id="serviceParts"><div class="notice">Henüz parça eklenmedi.</div></div><button class="btn primary" onclick="addServicePart()">+ Parça Ekle</button></div>
+    <div class="section card"><h2>Teslim & İmza Onayları</h2><div class="toolbar"><button class="btn ghost" onclick="demoToast('Teknik servis imzası kaydedildi.')">Servis İmzası At</button><button class="btn ghost" onclick="demoToast('Kurum yetkilisi imzası kaydedildi.')">Kurum İmzası At</button><button class="btn ok" onclick="demoToast('Servis formu demo olarak tamamlandı ve kaydedildi.')">Servis Formunu Tamamla & Kaydet</button></div></div>
+  </section>
+
+  <section id="warehouse" class="page hide">
+    <div class="cards"><div class="card kpi"><small>ANA DEPO</small><b>1.524</b><div class="accent">Toplam miktar</div></div><div class="card kpi"><small>REAKTİF ALT DEPOSU</small><b>68</b><div class="accent">Kit / lot bazlı</div></div><div class="card kpi"><small>ARAÇ DEPOLARI</small><b>7</b><div class="accent">Tekniker zimmeti</div></div><div class="card kpi"><small>SKT &lt; 30 GÜN</small><b class="accent-yellow">2</b><div class="accent">Uyarı bekleyen</div></div></div>
+    <div class="section"><div class="toolbar"><input id="stockSearch" class="input" placeholder="Malzeme, lot, marka, model, depo ara..." oninput="filterStock()"><button class="btn primary" onclick="demoToast('Mal girişi ekranı demo modunda.')">+ Mal Girişi</button></div><div class="tablewrap"><table id="stockTable"><thead><tr><th>KOD</th><th>MALZEME</th><th>TÜR</th><th>LOT</th><th>SKT</th><th>DEPO</th><th>MİKTAR</th><th>DURUM</th></tr></thead><tbody>
+      <tr><td>REA-MIN-GLU</td><td><b>Glucose Reagent</b><br>Mindray BS200</td><td>Reaktif</td><td>GL26001</td><td>15.10.2026</td><td>Reaktif Alt Deposu</td><td>20 Kit</td><td><span class="badge b-green">Normal</span></td></tr>
+      <tr><td>REA-MIN-GLU</td><td><b>Glucose Reagent</b><br>Mindray BS200</td><td>Reaktif</td><td>GL26002</td><td>31.12.2026</td><td>Reaktif Alt Deposu</td><td>30 Kit</td><td><span class="badge b-green">Normal</span></td></tr>
+      <tr><td>PRC-MIN-SPR</td><td><b>Sample Probe Assembly</b><br>Mindray BS200</td><td>Cihaz Parçası</td><td>-</td><td>-</td><td>Yedek Parça Alt Deposu</td><td>2 Adet</td><td><span class="badge b-yellow">Düşük</span></td></tr>
+      <tr><td>BKM-BC5580</td><td><b>BC5580 Bakım Seti</b><br>Mindray BC5580</td><td>Bakım Seti</td><td>BK2607</td><td>01.04.2027</td><td>Ana Depo</td><td>4 Set</td><td><span class="badge b-green">Normal</span></td></tr>
+    </tbody></table></div></div>
+    <div class="section card"><h2>Stok Motoru Kuralları</h2><p style="color:var(--muted);line-height:1.65">Aynı malzeme + aynı lot + aynı SKT tekrar gelirse yeni katalog kaydı açılmaz; mevcut partiye yeni <b>GİRİŞ</b> hareketi eklenir. Farklı lot/SKT ayrı parti olur. Reaktif çıkışları FEFO ile yapılır. Stok hareketleri silinmez; hatalı işlem ters hareketle düzeltilir.</p></div>
+  </section>
+
+  <section id="requests" class="page hide">
+    <div class="notice">Saha servisi parça talebi oluşturur → servis müdürü onaylar → depo teslim kodu ile araç deposuna transfer eder → servis kullanır/iade eder → mahsuplaşma kapanır.</div>
+    <div class="tablewrap"><table><thead><tr><th>SERVİS</th><th>KURUM / CİHAZ</th><th>TALEP EDEN</th><th>PARÇA</th><th>MİKTAR</th><th>DURUM</th><th>TESLİM KODU</th><th>İŞLEM</th></tr></thead><tbody id="reqBody"><tr><td>SRV-2026-004381</td><td>Dicle Üniversitesi<br>MINDRAY BS200</td><td>Ahmet Tekniker</td><td>Sample Probe Assembly</td><td>1</td><td id="reqStatus"><span class="badge b-yellow">ONAY BEKLİYOR</span></td><td id="reqCode">-</td><td id="reqAction"><button class="btn primary" onclick="approveReq()">Müdür Onayla</button></td></tr></tbody></table></div>
+    <div class="section card"><h2>Araç Mahsuplaşması</h2><p style="color:var(--muted)">Teslim edilen = kullanılan + iade edilen + araçta kalan. Fark oluşursa servis müdürü onayına düşer.</p></div>
+  </section>
+
+  <div id="toast" class="notice hide" style="position:fixed;right:18px;bottom:18px;z-index:60;max-width:360px"></div>
+  <div class="footer">© 2026 Serdar GÜNLÜ Management System • Demo arayüzü</div>
+</main>
+</div>
+<script>
+const titles={dashboard:['İŞ ZEKASI & KONTROL MERKEZİ','Envanter, servis, bakım, depo ve lojistik tek merkezde.'],inventory:['ENVANTER LİSTESİ','Cihaz, seri no, QR, kurum, montaj, servis ve bakım geçmişi.'],maintenance:['PERİYODİK BAKIM TAKİP LİSTESİ','Cihaz bakım periyotları, planlanan tarihler ve durum yönetimi.'],service:['CİHAZ SERVİS & ARIZA FORMU','Kurum, cihaz, müdahale, parça, imza ve sonuç tek formda.'],warehouse:['DEPO & STOK YÖNETİMİ','Lot/SKT, FEFO, alt depolar, kurum depoları ve araç stokları.'],requests:['SERVİS PARÇA TALEPLERİ','Talep, müdür onayı, teslim kodu, araç transferi ve mahsuplaşma.']};
+function openPage(id){document.querySelectorAll('.page').forEach(x=>x.classList.add('hide'));document.getElementById(id).classList.remove('hide');document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));document.getElementById('pageTitle').textContent=titles[id][0];document.getElementById('pageSub').textContent=titles[id][1];document.getElementById('side').classList.remove('open');window.scrollTo(0,0)}
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>openPage(b.dataset.page));
+function filterInventory(){const q=document.getElementById('invSearch').value.toLocaleLowerCase('tr-TR');document.querySelectorAll('#invTable tbody tr').forEach(r=>r.style.display=r.innerText.toLocaleLowerCase('tr-TR').includes(q)?'':'none')}
+function filterStock(){const q=document.getElementById('stockSearch').value.toLocaleLowerCase('tr-TR');document.querySelectorAll('#stockTable tbody tr').forEach(r=>r.style.display=r.innerText.toLocaleLowerCase('tr-TR').includes(q)?'':'none')}
+function demoToast(t){const x=document.getElementById('toast');x.textContent=t;x.classList.remove('hide');clearTimeout(window._tt);window._tt=setTimeout(()=>x.classList.add('hide'),2600)}
+function addServicePart(){document.getElementById('serviceParts').innerHTML='<div class="tablewrap"><table><thead><tr><th>PARÇA</th><th>DEPO / ZİMMET</th><th>MİKTAR</th><th>DURUM</th></tr></thead><tbody><tr><td>Sample Probe Assembly</td><td>Ahmet Araç Deposu</td><td>1</td><td><span class="badge b-blue">Serviste Kullanıldı</span></td></tr></tbody></table></div>';demoToast('Parça servis formuna eklendi; araç zimmetinden düşüm hazırlandı.')}
+function approveReq(){const code=String(Math.floor(100000+Math.random()*900000));document.getElementById('reqStatus').innerHTML='<span class="badge b-green">ONAYLANDI</span>';document.getElementById('reqCode').innerHTML='<b>'+code+'</b>';document.getElementById('reqAction').innerHTML='<button class="btn ok" onclick="deliverReq()">Kod ile Teslim</button>';demoToast('Talep onaylandı; teslim kodu üretildi.')}
+function deliverReq(){document.getElementById('reqStatus').innerHTML='<span class="badge b-blue">ARAÇ DEPOSUNA AKTARILDI</span>';document.getElementById('reqAction').textContent='-';demoToast('Parça ana depodan tekniker araç deposuna transfer edildi.')}
+</script>
+</body></html>
